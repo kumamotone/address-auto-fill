@@ -14,34 +14,44 @@ async function decryptData(encryptedData) {
 
 async function autoFillAddress(address) {
   const fieldMapping = {
-    'form-postal': ['postal-code', 'zipcode', 'zip', 'postal'],
-    'form-prefecture': ['address-level1', 'state', 'prefecture', 'pref'],
-    'form-city': ['address-level2', 'city'],
-    'form-address1': ['address-line1', 'street-address', 'address1'],
-    'form-address2': ['address-line2', 'apartment', 'address2'],
-    'family-name': ['family-name', 'lastname', 'last-name'],
-    'given-name': ['given-name', 'firstname', 'first-name'],
-    'tel': ['tel', 'telephone', 'phone', 'mobile'],
-    'email': ['email', 'mail'],
-    'bday-year': ['bday-year', 'birthyear'],
-    'bday-month': ['bday-month', 'birthmonth'],
-    'bday-day': ['bday-day', 'birthday']
+    'form-postal': ['postal', 'zip', 'postcode', '郵便番号'],
+    'form-prefecture': ['prefecture', 'pref', 'state', 'region', '都道府県'],
+    'form-city': ['city', 'locality', 'address-level2', '市区町村'],
+    'form-address1': ['address1', 'street', 'street-address', 'line1', '町名番地'],
+    'form-address2': ['address2', 'extended-address', 'line2', '建物名'],
+    'family-name': ['family', 'last', 'surname', '姓'],
+    'given-name': ['given', 'first', 'name', '名'],
+    'tel': ['tel', 'telephone', 'phone', 'mobile', '電話'],
+    'email': ['email', 'mail', 'メール'],
+    'bday-year': ['year', 'birthyear', '年'],
+    'bday-month': ['month', 'birthmonth', '月'],
+    'bday-day': ['day', 'birthday', '日']
   };
 
-  for (const [key, possibleNames] of Object.entries(fieldMapping)) {
-    const value = address[key];
-    if (value) {
-      for (const name of possibleNames) {
-        const input = document.querySelector(`input[name="${name}"], input[id="${name}"], input[autocomplete="${name}"], select[name="${name}"], select[id="${name}"]`);
-        if (input) {
+  const inputs = document.querySelectorAll('input, select');
+  
+  for (const input of inputs) {
+    const inputId = input.id.toLowerCase();
+    const inputName = input.name.toLowerCase();
+    const inputAutocomplete = (input.getAttribute('autocomplete') || '').toLowerCase();
+
+    for (const [key, possibleNames] of Object.entries(fieldMapping)) {
+      if (possibleNames.some(name => 
+          inputId.includes(name) || 
+          inputName.includes(name) || 
+          inputAutocomplete.includes(name)
+      )) {
+        const value = address[key];
+        if (value) {
           if (input.tagName.toLowerCase() === 'select') {
-            // プルダウンメニューの場合
-            const option = Array.from(input.options).find(opt => opt.text.includes(value) || opt.value.includes(value));
+            const option = Array.from(input.options).find(opt => 
+              opt.text.toLowerCase().includes(value.toLowerCase()) || 
+              opt.value.toLowerCase().includes(value.toLowerCase())
+            );
             if (option) {
               input.value = option.value;
             }
           } else {
-            // 通常の入力フィールドの場合
             input.value = value;
           }
           input.dispatchEvent(new Event('input', { bubbles: true }));
@@ -53,7 +63,7 @@ async function autoFillAddress(address) {
   }
 
   // 特別な処理: 都道府県と市区町村を結合
-  const prefCity = document.querySelector('input[name="pref_city"]');
+  const prefCity = document.querySelector('input[name*="pref_city"], input[id*="pref_city"]');
   if (prefCity) {
     prefCity.value = `${address['form-prefecture']} ${address['form-city']}`;
     prefCity.dispatchEvent(new Event('input', { bubbles: true }));
@@ -61,7 +71,7 @@ async function autoFillAddress(address) {
   }
 
   // 特別な処理: 町名・番地と建物名を結合
-  const street = document.querySelector('input[name="street"]');
+  const street = document.querySelector('input[name*="street"], input[id*="street"]');
   if (street) {
     street.value = `${address['form-address1']} ${address['form-address2'] || ''}`.trim();
     street.dispatchEvent(new Event('input', { bubbles: true }));

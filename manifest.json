@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "住所自動入力プラス",
+  "version": "1.4",
+  "description": "複数の住所を安全に保存し、自動的にフォームに入力します",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "contextMenus",
+    "<all_urls>"
+  ],
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["crypto-js.min.js", "content.js"]
+    }
+  ],
+  "content_security_policy": "script-src 'self'; object-src 'self'",
+  "web_accessible_resources": ["crypto-js.min.js"]
+}

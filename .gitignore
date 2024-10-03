@@ -1,0 +1,38 @@
+# Node.js関連
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# ビルド出力
+dist/
+build/
+
+# IDEやエディタの設定ファイル
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS生成ファイル
+.DS_Store
+Thumbs.db
+
+# 一時ファイル
+*.tmp
+*.bak
+*.swp
+
+# Chrome拡張機能関連
+*.crx
+*.pem
+
+# 環境設定ファイル（必要に応じてコメントアウトを解除）
+# .env
+
+# ログファイル
+*.log
+
+# その他
+*.zip
+
+.history/

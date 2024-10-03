@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>住所自動入力プラス</title>
+  <style>
+    body { width: 300px; font-family: Arial, sans-serif; }
+    input { width: 100%; margin-bottom: 5px; padding: 5px; box-sizing: border-box; }
+    button { width: 100%; margin-top: 10px; padding: 10px; }
+    #message { color: green; margin-top: 10px; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h2>住所情報</h2>
+  <form id="addressForm" autocomplete="on">
+    <input type="text" id="form-postal" name="postal-code" placeholder="郵便番号" required pattern="\d{3}-?\d{4}" autocomplete="postal-code">
+    <input type="text" id="form-prefecture" name="address-level1" placeholder="都道府県" required autocomplete="address-level1">
+    <input type="text" id="form-city" name="address-level2" placeholder="市区町村" required autocomplete="address-level2">
+    <input type="text" id="form-address1" name="address-line1" placeholder="町名・番地" required autocomplete="address-line1">
+    <input type="text" id="form-address2" name="address-line2" placeholder="建物名・部屋番号" autocomplete="address-line2">
+    <input type="text" id="family-name" name="family-name" placeholder="姓" required autocomplete="family-name">
+    <input type="text" id="given-name" name="given-name" placeholder="名" required autocomplete="given-name">
+    <input type="tel" id="tel" name="tel" placeholder="電話番号" autocomplete="tel">
+    <input type="email" id="email" name="email" placeholder="メールアドレス" autocomplete="email">
+    <input type="number" id="bday-year" name="bday-year" placeholder="誕生年" min="1900" max="2023" autocomplete="bday-year">
+    <input type="number" id="bday-month" name="bday-month" placeholder="誕生月" min="1" max="12" autocomplete="bday-month">
+    <input type="number" id="bday-day" name="bday-day" placeholder="誕生日" min="1" max="31" autocomplete="bday-day">
+    <button type="submit">保存</button>
+  </form>
+  <div id="message"></div>
+  <script src="crypto-js.min.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
